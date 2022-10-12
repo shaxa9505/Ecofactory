@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+
+    h1 Mahsulotlar yaratish
+    form(method="POST" action="/products/add" enctype="multipart/form-data")
+        label(for="nameuz") Name (uzb)
+        input(type="text" name="nameuz" placeholder="Mahsulot nomi (uzb) ") 
+        label(for="nameru") Name (ru)
+        input(type="text" name="nameru" placeholder="Mahsulot nomi (ru) ") 
+        label(for="nameen") Name (en)
+        input(type="text" name="nameen" placeholder="Mahsulot nomi (en) ") 
+        label(for="image") Image 
+        input(type="file" accept=".png, .jpg, .jpeg" name="image")
+        label(for="fullTextuz") Matni (uzb)
+        input(type="text" name="fullTextuz" placeholder="Info (uz) ") 
+        label(for="fullTextru") Matni (ru)
+        input(type="text" name="fullTextru" placeholder="Info (ru) ") 
+        label(for="fullTexten") Matni (en)
+        input(type="text" name="fullTexten" placeholder="Info (en) ")
+        label(for="price") Narxi 
+        input(type="number" name="price" placeholder="Narxi")
+        input(type="submit")
+        

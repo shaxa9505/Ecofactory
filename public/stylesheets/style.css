@@ -1,0 +1,19 @@
+*{
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+}
+
+header ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+header ul li a{
+  background-color: rgb(88, 86, 86);
+  padding: 10px;
+  margin: 5px;
+  display: inline-block;
+  color: white;
+}
