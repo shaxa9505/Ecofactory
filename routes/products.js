@@ -2,7 +2,7 @@ const { Router } = require("express");
 const Products = require("../models/Products");
 const router = Router();
 const multer = require("multer");
-const { body, validationResult } = require("express-validator")
+const { body, validationResult, check } = require("express-validator")
 
 const image_storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -29,14 +29,12 @@ router.get("/products/:id", async (req, res) => {
     res.render("product-id");
 })
 
-router.post("/products/add", upload.single("image"), 
-
-
+router.post("/products/add", upload.single("image"),
 
     [
-        body("nameuz").isEmpty().isLength({min: 3, max: 150}).withMessage("Iltimos nomini kiritng (uz) "),
-        body("nameru").isEmpty().isLength({min: 3, max: 150}).withMessage("Iltimos nomini kiritng (ru) "),
-        body("nameen").isEmpty().isLength({min: 3, max: 150}).withMessage("Iltimos nomini kiritng (en) ")
+        body("nameuz").isEmpty().withMessage("3 harfdan kam bulmasin (uz)").isLength({ min: 3, max: 150 }).withMessage("Iltimos nomini kiritng (uz) "),
+        body("nameuz").isEmpty().withMessage("3 harfdan kam bulmasin (ru)").isLength({ min: 3, max: 150 }).withMessage("Iltimos nomini kiritng (ru) "),
+        body("nameuz").isEmpty().withMessage("3 harfdan kam bulmasin (en)").isLength({ min: 3, max: 150 }).withMessage("Iltimos nomini kiritng (en) "),
     ],
 
     async (req, res) => {
@@ -45,27 +43,30 @@ router.post("/products/add", upload.single("image"),
 
         let handleError = !errors.isEmpty();
 
-        if(handleError) {
-            res.render("pages/add-product", { errors: errors.errors })
+        if (handleError) {
+            res.render("pages/add-product", { errors: errors.mapped() })
+            console.log({ error: errors.errors });
         }
 
-        console.log({ body: req.body });
-        const { nameuz, nameru, nameen, fullTextuz, fullTextru, fullTexten, price } = req.body
-        const product = new Products({
-            name: { uz: nameuz, ru: nameru, en: nameen },
-            image: req.file,
-            fulltext: { uz: fullTextuz, ru: fullTextru, en: fullTexten },
-            price: price
-        })
+        else {
+            const { nameuz, nameru, nameen, fullTextuz, fullTextru, fullTexten, price } = req.body
+            const product = new Products({
+                name: { uz: nameuz, ru: nameru, en: nameen },
+                image: req.file,
+                fulltext: { uz: fullTextuz, ru: fullTextru, en: fullTexten },
+                price: price
+            })
 
-        console.log(product);
+            console.log(product);
 
-        product.save((err) => {
-            if (err)
-                console.log(err);
-            else
-            res.redirect("/")
-        })
+            product.save((err) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.redirect("/")
+            })
+        }
+
     })
 
 
